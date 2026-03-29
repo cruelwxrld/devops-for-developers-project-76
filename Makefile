@@ -9,6 +9,9 @@ prepare: deps
 deploy:
         ansible-playbook -i inventory.ini deploy.yml
 
+edit-secrets:
+        ansible-vault edit group_vars/webservers/vault.yml
+
 check:
         ansible-playbook -i inventory.ini playbook.yml --syntax-check
         ansible-playbook -i inventory.ini deploy.yml --syntax-check
