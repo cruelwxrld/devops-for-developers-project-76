@@ -14,7 +14,7 @@
   tasks:
     - name: Добавить пользователя ubuntu в группу docker
       ansible.builtin.user:
-        name: "{{ ansible_user }}"
+        name: ubuntu
         groups: docker
         append: yes
 
