@@ -1,0 +1,33 @@
+---
+- name: Подготовка серверов для деплоя приложения
+  hosts: all
+  gather_facts: yes
+
+  vars:
+    pip_install_packages:
+      - name: docker
+
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
+
+  tasks:
+    - name: Добавить пользователя ubuntu в группу docker
+      ansible.builtin.user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Запустить тестовый контейнер (для проверки)
+      community.docker.docker_container:
+        name: test-app
+        image: nginx:latest
+        ports:
+          - "80:80"
+        state: started
+      when: false  # Временно отключено, замените на true когда будете тестировать
+
+    - name: Вывести информацию о Docker
+      ansible.builtin.debug:
+        msg:
+          - "Docker version: {{ ansible_facts.docker_version.stdout | default('not installed yet') }}"

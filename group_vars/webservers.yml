@@ -1,0 +1,11 @@
+---
+pip_install_packages:
+  - name: docker
+  - name: docker-compose
+
+docker_edition: 'ce'
+docker_package: "docker-{{ docker_edition }}"
+docker_package_state: present
+
+app_port: 80
+app_image: "your-app-image:latest"
