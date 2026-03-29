@@ -1,7 +1,7 @@
----
 - name: Подготовка серверов для деплоя приложения
   hosts: all
   gather_facts: yes
+  become: yes
 
   vars:
     pip_install_packages:
@@ -18,16 +18,29 @@
         groups: docker
         append: yes
 
-    - name: Запустить тестовый контейнер (для проверки)
-      community.docker.docker_container:
-        name: test-app
-        image: nginx:latest
-        ports:
-          - "80:80"
-        state: started
-      when: true
+- name: Установка Datadog Agent на серверы приложений
+  hosts: webservers
+  gather_facts: yes
+  become: yes
 
-    - name: Вывести информацию о Docker
-      ansible.builtin.debug:
-        msg:
-          - "Docker version: {{ ansible_facts.docker_version.stdout | default('not installed yet') }}"
+  vars:
+    datadog_api_key: "{{ vault_datadog_api_key }}"
+    datadog_site: "{{ vault_datadog_site }}"
+    datadog_agent_major_version: 7
+    datadog_checks:
+      http_check:
+        init_config: {}
+        instances:
+          - name: "Redmine HTTP Check"
+            url: "http://localhost:{{ redmine_port }}"
+            timeout: 10
+            method: GET
+            collect_response_time: true
+            http_response_status_code: "2\\d\\d|3\\d\\d"
+            tags:
+              - "app:redmine"
+
+  tasks:
+    - name: Импорт роли Datadog Agent из коллекции
+      ansible.builtin.import_role:
+        name: datadog.dd.agent

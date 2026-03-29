@@ -1,4 +1,3 @@
----
 pip_install_packages:
   - name: docker
   - name: docker-compose
@@ -9,11 +8,3 @@ docker_package_state: present
 
 app_port: 80
 app_image: "your-app-image:latest"
-
-redmine_port: 3000
-
-redmine_db_host: "192.168.0.5"
-redmine_db_port: 5432
-redmine_db_name: "bd_rj6m"
-redmine_db_user: "dbadmin"
-redmine_db_password: "iaQ82mFmCpoGOxhB6Kh3ihttWjGRULma19p7ng5qYC0Ejjol3VVOK5dAMxJ7arSE"

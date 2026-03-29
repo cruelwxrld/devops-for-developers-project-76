@@ -8,3 +8,8 @@ redmine_db_port: "{{ vault_redmine_db_port }}"
 redmine_db_name: "{{ vault_redmine_db_name }}"
 redmine_db_user: "{{ vault_redmine_db_user }}"
 redmine_db_password: "{{ vault_redmine_db_password }}"
+
+datadog_api_key: "{{ vault_datadog_api_key }}"
+datadog_app_key: "{{ vault_datadog_app_key }}"
+datadog_site: "{{ vault_datadog_site }}"
+datadog_agent_major_version: 7
