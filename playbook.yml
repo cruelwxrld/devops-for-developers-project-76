@@ -1,7 +1,7 @@
 - name: Подготовка серверов для деплоя приложения
   hosts: all
-  gather_facts: yes
-  become: yes
+  gather_facts: true
+  become: true
 
   vars:
     pip_install_packages:
@@ -16,12 +16,12 @@
       ansible.builtin.user:
         name: ubuntu
         groups: docker
-        append: yes
+        append: true
 
 - name: Установка Datadog Agent на серверы приложений
   hosts: webservers
-  gather_facts: yes
-  become: yes
+  gather_facts: true
+  become: true
 
   vars:
     datadog_api_key: "{{ vault_datadog_api_key }}"
