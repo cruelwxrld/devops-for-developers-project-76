@@ -25,7 +25,7 @@
         ports:
           - "80:80"
         state: started
-      when: false  # Временно отключено, замените на true когда будете тестировать
+      when: true
 
     - name: Вывести информацию о Docker
       ansible.builtin.debug:

@@ -1,0 +1,37 @@
+---
+- name: Деплой Redmine на серверы
+  hosts: all
+  gather_facts: yes
+  become: yes
+
+  vars:
+    redmine_port: 3000
+    container_name: redmine
+    redmine_image: redmine:latest
+    redmine_db_host: "192.168.0.5"
+    redmine_db_port: 5432
+    redmine_db_name: "bd_rj6m"
+    redmine_db_user: "dbadmin"
+    redmine_db_password: "iaQ82mFmCpoGOxhB6Kh3ihttWjGRULma19p7ng5qYC0Ejjol3VVOK5dAMxJ7arSE"
+
+  tasks:
+    - name: Остановить и удалить существующий контейнер (если есть)
+      shell: |
+        docker stop {{ container_name }} || true
+        docker rm {{ container_name }} || true
+      ignore_errors: yes
+
+    - name: Запустить Redmine контейнер с подключением к БД
+      shell: |
+        docker run -d \
+          --name {{ container_name }} \
+          --restart always \
+          -p {{ redmine_port }}:3000 \
+          -e REDMINE_DB_POSTGRES={{ redmine_db_host }} \
+          -e REDMINE_DB_PORT={{ redmine_db_port }} \
+          -e REDMINE_DB_DATABASE={{ redmine_db_name }} \
+          -e REDMINE_DB_USERNAME={{ redmine_db_user }} \
+          -e REDMINE_DB_PASSWORD='{{ redmine_db_password }}' \
+          {{ redmine_image }}
+      register: result
+      changed_when: result.rc == 0
